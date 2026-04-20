@@ -1,3 +1,5 @@
+type Rating = 1 | 2 | 3 | 4 | 5;
+
 export type CityName =
   | 'Amsterdam'
   | 'Paris'
@@ -28,7 +30,7 @@ export type OfferPreview = {
   };
   isFavorite: boolean;
   isPremium: boolean;
-  rating: 1 | 2 | 3 | 4 | 5;
+  rating: Rating;
   previewImage: string;
 };
 
@@ -43,4 +45,16 @@ export type OfferFull = OfferPreview & {
   };
   images: string[];
   maxAdults: number;
+};
+
+export type Comment = {
+  id: string;
+  date: string;
+  user: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  comment: string;
+  rating: Rating;
 };

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import {CitiesCardList} from '../../components/cities-card-list';
+import { CitiesCardList } from '../../components/cities-card-list';
 import { type OfferPreview } from '../../shared/types';
 import { routesMap } from '../../shared/constants';
 
@@ -16,32 +16,50 @@ function MainPage({ offers }: MainPageProps) {
           <section className="locations container">
             <ul className="locations__list tabs__list">
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item"
+                  to={routesMap.empty}
+                >
                   <span>Paris</span>
                 </Link>
               </li>
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item"
+                  to={routesMap.empty}
+                >
                   <span>Cologne</span>
                 </Link>
               </li>
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item"
+                  to={routesMap.empty}
+                >
                   <span>Brussels</span>
                 </Link>
               </li>
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item tabs__item--active" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item tabs__item--active"
+                  to={routesMap.empty}
+                >
                   <span>Amsterdam</span>
                 </Link>
               </li>
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item"
+                  to={routesMap.empty}
+                >
                   <span>Hamburg</span>
                 </Link>
               </li>
               <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to={routesMap.empty}>
+                <Link
+                  className="locations__item-link tabs__item"
+                  to={routesMap.empty}
+                >
                   <span>Dusseldorf</span>
                 </Link>
               </li>
@@ -52,7 +70,9 @@ function MainPage({ offers }: MainPageProps) {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+              <b className="places__found">
+                {offers.length} places to stay in Amsterdam
+              </b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -79,7 +99,9 @@ function MainPage({ offers }: MainPageProps) {
                   </li>
                 </ul>
               </form>
-              <CitiesCardList offers={offers} />
+              {offers && offers.length > 0 && (
+                <CitiesCardList offers={offers} />
+              )}
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
