@@ -9,18 +9,20 @@ type Variant = keyof typeof cardImageSizesMap;
 type PlaceCardProps = {
   offer: OfferPreview;
   variant: Variant;
-  onActive: (id: string | null) => void;
+  onActive?: (id: string | null) => void;
 };
 
 const PlaceCard = ({ offer, variant, onActive }: PlaceCardProps) => {
   const isCitiesCard = variant === 'cities';
   const isFavoritesCard = variant === 'favorites';
+  const isNearCard = variant === 'near';
 
   return (
     <article
       className={cn('place-card', {
         ['cities__card']: isCitiesCard,
         ['favorites__card']: isFavoritesCard,
+        ['near-places__card']: isNearCard,
       })}
       onMouseEnter={() => {
         onActive?.(offer.id);
@@ -34,6 +36,7 @@ const PlaceCard = ({ offer, variant, onActive }: PlaceCardProps) => {
         className={cn('place-card__image-wrapper', {
           'cities__image-wrapper': isCitiesCard,
           'favorites__image-wrapper': isFavoritesCard,
+          'near-places__image-wrapper': isNearCard,
         })}
       >
         <Link to={routesMap.getOfferUrl(offer.id)}>

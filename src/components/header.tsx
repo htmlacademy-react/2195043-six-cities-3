@@ -8,7 +8,7 @@ function Header() {
         <div className="header__wrapper">
           <div className="header__left">
             <Link
-              to={routesMap.empty}
+              to={routesMap.root}
               className="header__logo-link header__logo-link--active"
             >
               <img

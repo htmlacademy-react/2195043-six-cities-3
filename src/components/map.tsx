@@ -6,6 +6,7 @@ type MapProps = {
   city: OfferPreview['city'];
   offers: OfferPreview[];
   activeOfferId?: string | null;
+  className?: string;
 };
 
 const defaultCustomIcon = new Icon({
@@ -20,7 +21,12 @@ const activeCustomIcon = new Icon({
   iconAnchor: [13.5, 39],
 });
 
-function Map({ city, offers, activeOfferId = null }: MapProps) {
+function Map({
+  city,
+  offers,
+  activeOfferId = null,
+  className = 'cities__map map',
+}: MapProps) {
   const mapRef = useRef<HTMLElement | null>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
 
@@ -91,7 +97,7 @@ function Map({ city, offers, activeOfferId = null }: MapProps) {
     };
   }, [offers, activeOfferId]);
 
-  return <section className="cities__map map" ref={mapRef}></section>;
+  return <section className={className} ref={mapRef}></section>;
 }
 
 export default Map;

@@ -9,6 +9,7 @@ export const ratingStarMap = {
 export const cardImageSizesMap = {
   cities: { width: '260', height: '200' },
   favorites: { width: '150', height: '110' },
+  near: { width: '260', height: '200' },
 } as const;
 
 export const routesMap = {
