@@ -29,6 +29,6 @@ const FavoritesPage = () => {
       </footer>
     </div>
   );
-}
+};
 
-export {FavoritesPage};
+export { FavoritesPage };

@@ -14,12 +14,12 @@ const OfferPage = () => {
   const params = useParams();
   const offerInfo = offersFullMock.find((offer) => offer.id === params.id);
   const [activeNearbyOfferId, setActiveNearbyOfferId] = useState<string | null>(
-    null
+    null,
   );
 
   const nearbyOffers = useMemo(
     () => offersFullMock.filter((offer) => offer.id !== params.id).slice(0, 3),
-    [params.id]
+    [params.id],
   );
 
   if (!offerInfo) {
@@ -47,7 +47,10 @@ const OfferPage = () => {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: ratingStarMap[offerInfo.rating] }}></span>
+                  <span
+                    style={{ width: ratingStarMap[offerInfo.rating] }}
+                  >
+                  </span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
@@ -88,7 +91,7 @@ const OfferPage = () => {
                       'user__avatar-wrapper',
                       {
                         'offer__avatar-wrapper--pro': offerInfo.host.isPro,
-                      }
+                      },
                     )}
                   >
                     <img
@@ -99,7 +102,9 @@ const OfferPage = () => {
                       alt="Host avatar"
                     />
                   </div>
-                  <span className="offer__user-name">{offerInfo.host.name}</span>
+                  <span className="offer__user-name">
+                    {offerInfo.host.name}
+                  </span>
                   {offerInfo.host.isPro && (
                     <span className="offer__user-status">Pro</span>
                   )}

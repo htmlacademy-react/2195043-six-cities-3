@@ -11,4 +11,4 @@ function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
   return hasAccess ? children : <Navigate to={routesMap.login} />;
 }
 
-export default PrivateRoute;
+export { PrivateRoute };

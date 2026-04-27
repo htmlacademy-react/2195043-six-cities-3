@@ -6,19 +6,17 @@ type CitiesCardListProps = {
   onActiveCardChange: (id: string | null) => void;
 };
 
-const CitiesCardList = ({ offers, onActiveCardChange }: CitiesCardListProps) => {
-  return (
-    <div className="cities__places-list places__list tabs__content">
-      {offers.map((card) => (
-        <PlaceCard
-          key={card.id}
-          offer={card}
-          onActive={onActiveCardChange}
-          variant={'cities'}
-        />
-      ))}
-    </div>
-  );
-};
+const CitiesCardList = ({ offers, onActiveCardChange }: CitiesCardListProps) => (
+  <div className="cities__places-list places__list tabs__content">
+    {offers.map((card) => (
+      <PlaceCard
+        key={card.id}
+        offer={card}
+        onActive={onActiveCardChange}
+        variant={'cities'}
+      />
+    ))}
+  </div>
+);
 
 export { CitiesCardList };

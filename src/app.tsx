@@ -6,7 +6,7 @@ import { OfferPage } from './pages/offer/offer';
 import { NotFoundPage } from './pages/not-found/not-found';
 import { Layout } from './components/layout';
 import { ScrollToTop } from './components/scroll-to-top';
-import PrivateRoute from './components/private-route';
+import { PrivateRoute } from './components/private-route';
 import { routesMap } from './shared/constants';
 import { offerSlice } from './store/reducers/offerSlice';
 import { useAppDispatch } from './shared/hooks/redux';

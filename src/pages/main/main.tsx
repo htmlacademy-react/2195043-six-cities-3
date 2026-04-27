@@ -7,8 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../shared/hooks/redux';
 import { offerSlice } from '../../store/reducers/offerSlice';
 import { selectOffersByCity } from '../../store/selectors/offerSelectors';
 
-
-
 const MainPage = () => {
   const { offers } = useAppSelector((state) => state.offerReducer);
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
@@ -22,7 +20,7 @@ const MainPage = () => {
   //  }
   //  dispatch(setCurrentCity(activeCity));
   //}, [dispatch, activeCity, setCurrentCity]);
-  
+
   const filteredOffers = selectOffersByCity(offers, 'Amsterdam');
 
   return (
@@ -137,6 +135,6 @@ const MainPage = () => {
       </main>
     </div>
   );
-}
+};
 
-export {MainPage};
+export { MainPage };
