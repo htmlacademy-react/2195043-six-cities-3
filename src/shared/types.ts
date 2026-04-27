@@ -1,12 +1,8 @@
+import { cities } from './constants';
+
 export type Rating = 1 | 2 | 3 | 4 | 5;
 
-export type CityName =
-  | 'Amsterdam'
-  | 'Paris'
-  | 'Cologne'
-  | 'Brussels'
-  | 'Hamburg'
-  | 'Dusseldorf';
+export type CityName = typeof cities[number];
 
 type OfferType = 'apartment' | 'room' | 'house' | 'hotel';
 
