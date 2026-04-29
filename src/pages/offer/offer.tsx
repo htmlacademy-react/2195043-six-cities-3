@@ -1,152 +1,160 @@
-import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import cn from 'classnames';
-import { offersFullMock } from '../../mocks/offers';
-import { PlaceCard } from '../../components/place-card';
-import OffersMap from '../../components/map';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import OfferGallery from '../../components/offer-gallery';
-import PremiumMark from '../../components/premium-mark';
-import { ratingStarMap } from '../../shared/constants';
-import { commentsMock } from '../../mocks/comments';
+import { OfferNearbyList } from '../../components/offer-nearby-list';
+import { OfferNearbyMap } from '../../components/offer-nearby-map';
 import { OfferReview } from '../../components/offer-review';
+import PremiumMark from '../../components/premium-mark';
+import { Spinner } from '../../components/spinner';
+import { ratingStarMap } from '../../shared/constants';
+import { useAppDispatch, useAppSelector } from '../../shared/hooks/redux';
+import {
+  fetchNearbyOfferAction,
+  fetchOfferAction,
+} from '../../store/api/actions';
+import styles from './offer.module.css';
 
 const OfferPage = () => {
   const params = useParams();
-  const offerInfo = offersFullMock.find((offer) => offer.id === params.id);
+  const {
+    offer,
+    isOfferLoading,
+    offerError,
+    nearby,
+    isNearbyLoading,
+    nearbyError,
+  } = useAppSelector((state) => state.offerReducer);
   const [activeNearbyOfferId, setActiveNearbyOfferId] = useState<string | null>(
     null,
   );
 
-  const nearbyOffers = useMemo(
-    () => offersFullMock.filter((offer) => offer.id !== params.id).slice(0, 3),
-    [params.id],
-  );
+  const dispatch = useAppDispatch();
 
-  if (!offerInfo) {
-    return null;
-  }
+  useEffect(() => {
+    if (!params.id) {
+      return;
+    }
+    dispatch(fetchOfferAction(params.id));
+    dispatch(fetchNearbyOfferAction(params.id));
+  }, [dispatch, params.id]);
 
   return (
-    <div className="page">
-      <main className="page__main page__main--offer">
-        <section className="offer">
-          <div className="offer__gallery-container container">
-            <OfferGallery imagesPath={offerInfo.images} />
-          </div>
-          <div className="offer__container container">
-            <div className="offer__wrapper">
-              <PremiumMark show={offerInfo.isPremium} />
-              <div className="offer__name-wrapper">
-                <h1 className="offer__name">{offerInfo.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
-              </div>
-              <div className="offer__rating rating">
-                <div className="offer__stars rating__stars">
-                  <span
-                    style={{ width: ratingStarMap[offerInfo.rating] }}
-                  >
-                  </span>
-                  <span className="visually-hidden">Rating</span>
-                </div>
-                <span className="offer__rating-value rating__value">
-                  {offerInfo.rating}
-                </span>
-              </div>
-              <ul className="offer__features">
-                <li className="offer__feature offer__feature--entire">
-                  {offerInfo.type}
-                </li>
-                <li className="offer__feature offer__feature--bedrooms">
-                  {offerInfo.bedrooms} Bedrooms
-                </li>
-                <li className="offer__feature offer__feature--adults">
-                  Max {offerInfo.maxAdults} adults
-                </li>
-              </ul>
-              <div className="offer__price">
-                <b className="offer__price-value">&euro;{offerInfo.price}</b>
-                <span className="offer__price-text">&nbsp;night</span>
-              </div>
-              <div className="offer__inside">
-                <h2 className="offer__inside-title">What&apos;s inside</h2>
-                <ul className="offer__inside-list">
-                  {offerInfo.goods.map((good) => (
-                    <li className="offer__inside-item" key={good}>
-                      {good}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="offer__host">
-                <h2 className="offer__host-title">Meet the host</h2>
-                <div className="offer__host-user user">
-                  <div
-                    className={cn(
-                      'offer__avatar-wrapper',
-                      'user__avatar-wrapper',
-                      {
-                        'offer__avatar-wrapper--pro': offerInfo.host.isPro,
-                      },
-                    )}
-                  >
-                    <img
-                      className="offer__avatar user__avatar"
-                      src={offerInfo.host.avatarUrl}
-                      width="74"
-                      height="74"
-                      alt="Host avatar"
-                    />
-                  </div>
-                  <span className="offer__user-name">
-                    {offerInfo.host.name}
-                  </span>
-                  {offerInfo.host.isPro && (
-                    <span className="offer__user-status">Pro</span>
-                  )}
-                </div>
-                <div className="offer__description">
-                  <p className="offer__text">{offerInfo.description}</p>
-                </div>
-              </div>
-              {commentsMock && commentsMock.length > 0 && (
-                <OfferReview comments={commentsMock} />
-              )}
+    <div
+      className={cn({
+        page: !isOfferLoading,
+        [styles.loadingContainer]: isOfferLoading,
+      })}
+    >
+      {isOfferLoading && <Spinner />}
+      {!isOfferLoading && offerError && <p>{offerError}</p>}
+      {!isOfferLoading && !offerError && offer && (
+        <main className="page__main page__main--offer">
+          <section className="offer">
+            <div className="offer__gallery-container container">
+              <OfferGallery imagesPath={offer.images} />
             </div>
-          </div>
-          {nearbyOffers.length > 1 && (
-            <OffersMap
-              className="offer__map map"
-              city={offerInfo.city}
-              offers={nearbyOffers}
+            <div className="offer__container container">
+              <div className="offer__wrapper">
+                <PremiumMark show={offer.isPremium} />
+                <div className="offer__name-wrapper">
+                  <h1 className="offer__name">{offer.title}</h1>
+                  <button
+                    className="offer__bookmark-button button"
+                    type="button"
+                  >
+                    <svg
+                      className="offer__bookmark-icon"
+                      width="31"
+                      height="33"
+                    >
+                      <use xlinkHref="#icon-bookmark"></use>
+                    </svg>
+                    <span className="visually-hidden">To bookmarks</span>
+                  </button>
+                </div>
+                <div className="offer__rating rating">
+                  <div className="offer__stars rating__stars">
+                    <span style={{ width: ratingStarMap[offer.rating] }}></span>
+                    <span className="visually-hidden">Rating</span>
+                  </div>
+                  <span className="offer__rating-value rating__value">
+                    {offer.rating}
+                  </span>
+                </div>
+                <ul className="offer__features">
+                  <li className="offer__feature offer__feature--entire">
+                    {offer.type}
+                  </li>
+                  <li className="offer__feature offer__feature--bedrooms">
+                    {offer.bedrooms} Bedrooms
+                  </li>
+                  <li className="offer__feature offer__feature--adults">
+                    Max {offer.maxAdults} adults
+                  </li>
+                </ul>
+                <div className="offer__price">
+                  <b className="offer__price-value">&euro;{offer.price}</b>
+                  <span className="offer__price-text">&nbsp;night</span>
+                </div>
+                <div className="offer__inside">
+                  <h2 className="offer__inside-title">What&apos;s inside</h2>
+                  <ul className="offer__inside-list">
+                    {offer.goods.map((good) => (
+                      <li className="offer__inside-item" key={good}>
+                        {good}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="offer__host">
+                  <h2 className="offer__host-title">Meet the host</h2>
+                  <div className="offer__host-user user">
+                    <div
+                      className={cn(
+                        'offer__avatar-wrapper',
+                        'user__avatar-wrapper',
+                        {
+                          'offer__avatar-wrapper--pro': offer.host.isPro,
+                        },
+                      )}
+                    >
+                      <img
+                        className="offer__avatar user__avatar"
+                        src={offer.host.avatarUrl}
+                        width="74"
+                        height="74"
+                        alt="Host avatar"
+                      />
+                    </div>
+                    <span className="offer__user-name">{offer.host.name}</span>
+                    {offer.host.isPro && (
+                      <span className="offer__user-status">Pro</span>
+                    )}
+                  </div>
+                  <div className="offer__description">
+                    <p className="offer__text">{offer.description}</p>
+                  </div>
+                </div>
+                {params.id && <OfferReview offerId={params.id} />}
+              </div>
+            </div>
+            <OfferNearbyMap
+              city={offer.city}
+              nearby={nearby}
+              isLoading={isNearbyLoading}
+              error={nearbyError}
               activeOfferId={activeNearbyOfferId}
             />
-          )}
-        </section>
-        {nearbyOffers.length > 1 && (
-          <div className="container">
-            <section className="near-places places">
-              <h2 className="near-places__title">
-                Other places in the neighbourhood
-              </h2>
-              <div className="near-places__list places__list">
-                {nearbyOffers.map((offer) => (
-                  <PlaceCard
-                    key={offer.id}
-                    offer={offer}
-                    variant="near"
-                    onActive={setActiveNearbyOfferId}
-                  />
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-      </main>
+          </section>
+          <OfferNearbyList
+            nearby={nearby}
+            isLoading={isNearbyLoading}
+            error={nearbyError}
+            onActive={setActiveNearbyOfferId}
+          />
+        </main>
+      )}
     </div>
   );
 };

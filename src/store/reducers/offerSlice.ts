@@ -1,27 +1,59 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { type CityName, OfferPreview } from '../../shared/types';
+import { createSlice } from '@reduxjs/toolkit';
+import type { OfferFull } from '../../shared/types';
+import { fetchNearbyOfferAction, fetchOfferAction } from '../api/actions';
 
-type Offers = {
-  currentCity: CityName;
-  offers: OfferPreview[];
+type OfferState = {
+  offer: OfferFull | null;
+  nearby: OfferFull[] | null;
+  isOfferLoading: boolean;
+  offerError: string | null;
+  isNearbyLoading: boolean;
+  nearbyError: string | null;
 };
 
-const initialState: Offers = {
-  currentCity: 'Paris',
-  offers: [],
+const initialState: OfferState = {
+  offer: null,
+  nearby: null,
+  isOfferLoading: false,
+  offerError: null,
+  isNearbyLoading: false,
+  nearbyError: null,
 };
 
-export const offerSlice = createSlice({
-  name: 'offers',
+const offerSlice = createSlice({
+  name: 'offer',
   initialState,
-  reducers: {
-    setOffers(state, action: PayloadAction<OfferPreview[]>) {
-      state.offers = action.payload;
-    },
-    setCurrentCity(state, action: PayloadAction<CityName>) {
-      state.currentCity = action.payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOfferAction.pending, (state) => {
+        state.isOfferLoading = true;
+        state.offerError = null;
+        state.offer = null;
+      })
+      .addCase(fetchOfferAction.fulfilled, (state, action) => {
+        state.isOfferLoading = false;
+        state.offer = action.payload;
+      })
+      .addCase(fetchOfferAction.rejected, (state) => {
+        state.isOfferLoading = false;
+        state.offerError = 'Не удалось загрузить оффер';
+      });
+    builder
+      .addCase(fetchNearbyOfferAction.pending, (state) => {
+        state.isNearbyLoading = true;
+        state.nearbyError = null;
+        state.nearby = null;
+      })
+      .addCase(fetchNearbyOfferAction.fulfilled, (state, action) => {
+        state.isNearbyLoading = false;
+        state.nearby = action.payload;
+      })
+      .addCase(fetchNearbyOfferAction.rejected, (state) => {
+        state.isNearbyLoading = false;
+        state.nearbyError = 'Не удалось загрузить офферы по близости';
+      });
   },
+  reducers: {},
 });
 
-export default offerSlice.reducer;
+export const offerReducer = offerSlice.reducer;

@@ -19,7 +19,18 @@ export const routesMap = {
   login: '/login',
   favorites: '/favorites',
   offer: '/offer/:id',
-  getOfferUrl: (id: string) => `/offer/${id}` ,
+  offerById: (id: string) => `/offer/${id}`,
+} as const;
+
+export const apiPathsMap = {
+  offers: '/offers',
+  offer: (id: string) => `/offers/${id}`,
+  nearby: (id: string) => `/offers/${id}/nearby`,
+  comments: (id: string) => `/comments/${id}`,
+  favorite: '/favorite',
+  setFavoriteStatus: (id: string, status: 0 | 1) => `/favorite/${id}/${status}`,
+  login: '/login',
+  logout: '/logout',
 } as const;
 
 export const cities = [

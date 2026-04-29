@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { CitiesCardList } from '../../components/cities-card-list';
+import { CitiesTabs } from '../../components/cities-tabs';
 import Map from '../../components/map';
 import { useAppDispatch, useAppSelector } from '../../shared/hooks/redux';
-import { selectOffersByCity } from '../../store/selectors/offerSelectors';
-import { offerSlice } from '../../store/reducers/offerSlice';
 import type { CityName } from '../../shared/types';
-import { CitiesTabs } from '../../components/cities-tabs';
+import { setCurrentCity } from '../../store/reducers/offersListSlice';
+import { selectOffersByCity } from '../../store/selectors/offersListSelectors';
 
 const MainPage = () => {
-  const { offers, currentCity } = useAppSelector((state) => state.offerReducer);
+  const { offers, currentCity } = useAppSelector((state) => state.offersListReducer);
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
-  const { setCurrentCity } = offerSlice.actions;
   const dispatch = useAppDispatch();
 
   const filteredOffers = selectOffersByCity(offers, currentCity);
