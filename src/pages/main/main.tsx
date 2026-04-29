@@ -1,81 +1,40 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { CitiesCardList } from '../../components/cities-card-list';
 import Map from '../../components/map';
-import { type OfferPreview } from '../../shared/types';
-import { routesMap } from '../../shared/constants';
+import { useAppDispatch, useAppSelector } from '../../shared/hooks/redux';
+import { selectOffersByCity } from '../../store/selectors/offerSelectors';
+import { offerSlice } from '../../store/reducers/offerSlice';
+import type { CityName } from '../../shared/types';
+import { CitiesTabs } from '../../components/cities-tabs';
 
-type MainPageProps = {
-  offers: OfferPreview[];
-};
-
-function MainPage({ offers }: MainPageProps) {
+const MainPage = () => {
+  const { offers, currentCity } = useAppSelector((state) => state.offerReducer);
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  const { setCurrentCity } = offerSlice.actions;
+  const dispatch = useAppDispatch();
+
+  const filteredOffers = selectOffersByCity(offers, currentCity);
+
+  const handleCityChange = (city: CityName) => {
+    dispatch(setCurrentCity(city));
+  };
 
   return (
     <div className="page page--gray page--main">
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item"
-                  to={routesMap.empty}
-                >
-                  <span>Paris</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item"
-                  to={routesMap.empty}
-                >
-                  <span>Cologne</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item"
-                  to={routesMap.empty}
-                >
-                  <span>Brussels</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item tabs__item--active"
-                  to={routesMap.empty}
-                >
-                  <span>Amsterdam</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item"
-                  to={routesMap.empty}
-                >
-                  <span>Hamburg</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link
-                  className="locations__item-link tabs__item"
-                  to={routesMap.empty}
-                >
-                  <span>Dusseldorf</span>
-                </Link>
-              </li>
-            </ul>
-          </section>
+          <CitiesTabs
+            currentCity={currentCity}
+            onCityChange={handleCityChange}
+          />
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">
-                {offers.length} places to stay in Amsterdam
+                {filteredOffers.length} places to stay in {currentCity}
               </b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
@@ -103,18 +62,18 @@ function MainPage({ offers }: MainPageProps) {
                   </li>
                 </ul>
               </form>
-              {offers && offers.length > 0 && (
+              {filteredOffers && filteredOffers.length > 0 && (
                 <CitiesCardList
-                  offers={offers}
+                  offers={filteredOffers}
                   onActiveCardChange={setActiveOfferId}
                 />
               )}
             </section>
             <div className="cities__right-section">
-              {offers && offers.length > 0 && (
+              {filteredOffers && filteredOffers.length > 0 && (
                 <Map
-                  city={offers[0].city}
-                  offers={offers}
+                  city={filteredOffers[0].city}
+                  offers={filteredOffers}
                   activeOfferId={activeOfferId}
                 />
               )}
@@ -124,6 +83,6 @@ function MainPage({ offers }: MainPageProps) {
       </main>
     </div>
   );
-}
+};
 
-export default MainPage;
+export { MainPage };

@@ -21,3 +21,12 @@ export const routesMap = {
   offer: '/offer/:id',
   getOfferUrl: (id: string) => `/offer/${id}` ,
 } as const;
+
+export const cities = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf',
+] as const;

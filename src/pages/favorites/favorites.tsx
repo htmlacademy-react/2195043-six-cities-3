@@ -1,14 +1,10 @@
 import { Link } from 'react-router-dom';
-import {FavoritesCardList} from '../../components/favorites-card-list';
-import type { OfferPreview } from '../../shared/types';
+import { FavoritesCardList } from '../../components/favorites-card-list';
 import { routesMap } from '../../shared/constants';
+import { useAppSelector } from '../../shared/hooks/redux';
 
-type FavoritesPageProps = {
-  offers: OfferPreview[];
-};
-
-function FavoritesPage({ offers }: FavoritesPageProps) {
-
+const FavoritesPage = () => {
+  const { offers } = useAppSelector((state) => state.offerReducer);
 
   return (
     <div className="page">
@@ -33,6 +29,6 @@ function FavoritesPage({ offers }: FavoritesPageProps) {
       </footer>
     </div>
   );
-}
+};
 
-export default FavoritesPage;
+export { FavoritesPage };
