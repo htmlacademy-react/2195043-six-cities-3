@@ -1,28 +1,74 @@
 import { type ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../../components/header';
-import { routes } from '../../shared/constants';
-import { LoginData } from '../../shared/types';
+import { emailRegex, passwordRegex, routes } from '../../shared/constants';
+import { failure, success } from '../../shared/result';
 
-type FormData = LoginData;
-type Field = keyof typeof initialFormData;
+type FormData = {
+  email: string;
+  password: string;
+};
 
-const initialFormData = {
-  email: '',
-  password: '',
-} as const;
+type FormErrors = {
+  email: string | null;
+  password: string | null;
+};
+
+type Field = keyof FormData;
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
+  });
+  const [formErrors, setFormErrors] = useState<FormErrors>({
+    email: null,
+    password: null,
+  });
+
+  const hasErrors = Object.values(formErrors).some(Boolean);
+  const isFormIncomplete = !formData.email || !formData.password;
+  const isSubmitDisabled = hasErrors || isFormIncomplete;
+
+  const validatePassword = (password: string) => {
+    if (!passwordRegex.test(password)) {
+      return failure(
+        'Password must be at least 8 characters long and contain numbers, uppercase and lowercase letters',
+      );
+    }
+
+    return success(password);
+  };
+
+  const validateEmail = (email: string) => {
+    if (!emailRegex.test(email)) {
+      return failure('Email must be a valid email address');
+    }
+
+    return success(email);
+  };
+
+  const validationField = {
+    password: validatePassword,
+    email: validateEmail,
+  } as const;
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement>,
     field: Field,
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: event.target.value }));
-  };
+    const v = validationField[field];
+    const result = v(event.target.value);
+    if (!result.ok) {
+      setFormErrors((prev) => ({ ...prev, [field]: result.error }));
+      setFormData((prev) => ({ ...prev, [field]: event.target.value }));
+    }
 
-  console.log(formData);
+    if (result.ok) {
+      setFormErrors((prev) => ({ ...prev, [field]: null }));
+      setFormData((prev) => ({ ...prev, [field]: result.value }));
+    }
+  };
 
   return (
     <form className="login__form form" action="#" method="post">
@@ -50,7 +96,11 @@ const LoginForm = () => {
           onChange={(event) => handleInputChange(event, 'password')}
         />
       </div>
-      <button className="login__submit form__submit button" type="submit">
+      <button
+        className="login__submit form__submit button"
+        type="submit"
+        disabled={isSubmitDisabled}
+      >
         Sign in
       </button>
     </form>
