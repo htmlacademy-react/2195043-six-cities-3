@@ -1,10 +1,5 @@
 import { apiPaths } from '../shared/constants';
-import axios from 'axios';
-import {
-  createHttpError,
-  type HttpError,
-  UNKNOWN_HTTP_ERROR,
-} from '../shared/http-error';
+import type { HttpError } from '../shared/http-error';
 import type {
   Comment,
   LoginData,
@@ -13,94 +8,89 @@ import type {
   UserInfo,
 } from '../shared/types';
 import { createAppAsyncThunk } from './create-app-async-thunk';
+import { createSafeThunkPayload } from './create-safe-thunk-payload';
+
+type HttpErrorRejectConfig = { rejectValue: HttpError };
 
 export const fetchOffersListAction = createAppAsyncThunk<
   OfferPreview[],
-  undefined
->('offers/fetchOffers', async (_arg, { extra: api }) => {
-  const { data } = await api.get<OfferPreview[]>(apiPaths.offers);
-  return data;
-});
+  void,
+  HttpErrorRejectConfig
+>(
+  'offers/fetchOffers',
+  createSafeThunkPayload(async (_, api) => {
+    const { data } = await api.get<OfferPreview[]>(apiPaths.offers);
+    return data;
+  }),
+);
 
 export const fetchOfferAction = createAppAsyncThunk<
   OfferFull,
   string,
-  { rejectValue: HttpError }
+  HttpErrorRejectConfig
 >(
   'offer/fetchOffer',
-  async (id, { extra: api, rejectWithValue }) => {
-    try {
-      const { data } = await api.get<OfferFull>(apiPaths.offer(id));
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(createHttpError(error));
-      }
-
-      return rejectWithValue(UNKNOWN_HTTP_ERROR);
-    }
-  },
+  createSafeThunkPayload(async (id, api) => {
+    const { data } = await api.get<OfferFull>(apiPaths.offer(id));
+    return data;
+  }),
 );
 
-export const fetchNearbyOfferAction = createAppAsyncThunk<OfferFull[], string>(
+export const fetchNearbyOfferAction = createAppAsyncThunk<
+  OfferFull[],
+  string,
+  HttpErrorRejectConfig
+>(
   'offer/fetchNearbyOffer',
-  async (id, { extra: api }) => {
+  createSafeThunkPayload(async (id, api) => {
     const { data } = await api.get<OfferFull[]>(apiPaths.nearby(id));
     return data;
-  },
+  }),
 );
 
-export const fetchCommentsAction = createAppAsyncThunk<Comment[], string>(
+export const fetchCommentsAction = createAppAsyncThunk<
+  Comment[],
+  string,
+  HttpErrorRejectConfig
+>(
   'comments/fetchComments',
-  async (id, { extra: api }) => {
+  createSafeThunkPayload(async (id, api) => {
     const { data } = await api.get<Comment[]>(apiPaths.comments(id));
     return data;
-  },
+  }),
 );
 
 export const checkAuthAction = createAppAsyncThunk<
   UserInfo,
-  undefined,
-  { rejectValue: HttpError }
+  void,
+  HttpErrorRejectConfig
 >(
   'auth/checkAuth',
-  async (_arg, { extra: api, rejectWithValue }) => {
-    try {
-      const { data } = await api.get<UserInfo>(apiPaths.login);
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(createHttpError(error));
-      }
-
-      return rejectWithValue(UNKNOWN_HTTP_ERROR);
-    }
-  },
+  createSafeThunkPayload(async (_arg, api) => {
+    const { data } = await api.get<UserInfo>(apiPaths.login);
+    return data;
+  }),
 );
 
 export const loginAction = createAppAsyncThunk<
   UserInfo,
   LoginData,
-  { rejectValue: HttpError }
+  HttpErrorRejectConfig
 >(
   'auth/login',
-  async (loginData, { extra: api, rejectWithValue }) => {
-    try {
-      const { data } = await api.post<UserInfo>(apiPaths.login, loginData);
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(createHttpError(error));
-      }
-
-      return rejectWithValue(UNKNOWN_HTTP_ERROR);
-    }
-  },
+  createSafeThunkPayload(async (loginData, api) => {
+    const { data } = await api.post<UserInfo>(apiPaths.login, loginData);
+    return data;
+  }),
 );
 
-export const logoutAction = createAppAsyncThunk<void, void>(
+export const logoutAction = createAppAsyncThunk<
+  void,
+  void,
+  HttpErrorRejectConfig
+>(
   'auth/logout',
-  async (_arg, { extra: api }) => {
+  createSafeThunkPayload(async (_, api) => {
     await api.delete(apiPaths.logout);
-  },
+  }),
 );

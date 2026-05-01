@@ -2,12 +2,13 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { CityName, OfferPreview } from '../../shared/types';
 import { fetchOffersListAction } from '../async-actions';
 import { cities } from '../../shared/constants';
+import { type HttpError, UNKNOWN_HTTP_ERROR } from '../../shared/http-error';
 
 type OffersState = {
   currentCity: CityName;
   offers: OfferPreview[];
   isLoading: boolean;
-  error: string | null;
+  error: HttpError | null;
 };
 
 const initialState: OffersState = {
@@ -36,9 +37,9 @@ const offersListSlice = createSlice({
         state.isLoading = false;
         state.offers = action.payload;
       })
-      .addCase(fetchOffersListAction.rejected, (state) => {
+      .addCase(fetchOffersListAction.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'Не удалось список офферов';
+        state.error = action.payload ?? UNKNOWN_HTTP_ERROR;
       });
   },
 });

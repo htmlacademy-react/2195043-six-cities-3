@@ -54,9 +54,9 @@ const offerSlice = createSlice({
         state.isNearbyLoading = false;
         state.nearby = action.payload;
       })
-      .addCase(fetchNearbyOfferAction.rejected, (state) => {
+      .addCase(fetchNearbyOfferAction.rejected, (state, action) => {
         state.isNearbyLoading = false;
-        state.nearbyError = UNKNOWN_HTTP_ERROR;
+        state.nearbyError = action.payload ?? UNKNOWN_HTTP_ERROR;
       });
   },
   reducers: {},

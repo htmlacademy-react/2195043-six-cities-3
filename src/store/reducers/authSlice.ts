@@ -67,9 +67,9 @@ const authSlice = createSlice({
         state.authorizationStatus = authStatus.noAuth;
         state.userInfo = null;
       })
-      .addCase(logoutAction.rejected, (state) => {
+      .addCase(logoutAction.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = UNKNOWN_HTTP_ERROR;
+        state.error = action.payload ?? UNKNOWN_HTTP_ERROR;
       });
   },
 });
