@@ -39,11 +39,11 @@ export const authStatus = {
   noAuth: 'NO_AUTH'
 } as const;
 
-export const cities = [
-  'Paris',
-  'Cologne',
-  'Brussels',
-  'Amsterdam',
-  'Hamburg',
-  'Dusseldorf',
-] as const;
+export const cities = {
+  paris: 'Paris',
+  cologne: 'Cologne',
+  brussels: 'Brussels',
+  amsterdam: 'Amsterdam',
+  hamburg: 'Hamburg',
+  dusseldorf: 'Dusseldorf',
+} as const;

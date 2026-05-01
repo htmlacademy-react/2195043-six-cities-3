@@ -1,0 +1,62 @@
+import { Link } from 'react-router-dom';
+import { authStatus, routes } from '../shared/constants';
+import { useAppDispatch, useAppSelector } from '../shared/hooks/redux';
+import { logoutAction } from '../store/async-actions';
+
+const HeaderUserNav = () => {
+  const { authorizationStatus } = useAppSelector((state) => state.authReducer);
+
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    void dispatch(logoutAction());
+  };
+
+  const isAuthenticated = authorizationStatus === authStatus.auth;
+  const isGuest = authorizationStatus === authStatus.noAuth;
+  const isCheckingAuth = authorizationStatus === authStatus.unknown;
+
+  return (
+    <nav className="header__nav">
+      <ul className="header__nav-list">
+        {isCheckingAuth ||
+          (isGuest && (
+            <li className="header__nav-item user">
+              <Link
+                className="header__nav-link header__nav-link--profile"
+                to={routes.login}
+              >
+                <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                <span className="header__login">Sign in</span>
+              </Link>
+            </li>
+          ))}
+        {isAuthenticated && (
+          <>
+            <li className="header__nav-item user">
+              <Link
+                className="header__nav-link header__nav-link--profile"
+                to={routes.empty}
+              >
+                <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                <span className="header__user-name user__name">
+                  Oliver.conner@gmail.com
+                </span>
+                <span className="header__favorite-count">3</span>
+              </Link>
+            </li>
+            <li className="header__nav-item">
+              <Link className="header__nav-link" to={routes.empty}>
+                <span className="header__signout" onClick={handleLogout}>
+                  Sign out
+                </span>
+              </Link>
+            </li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
+};
+
+export { HeaderUserNav };

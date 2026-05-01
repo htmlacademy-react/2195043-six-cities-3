@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { CityName, OfferPreview } from '../../shared/types';
 import { fetchOffersListAction } from '../async-actions';
+import { cities } from '../../shared/constants';
 
 type OffersState = {
   currentCity: CityName;
@@ -10,7 +11,7 @@ type OffersState = {
 };
 
 const initialState: OffersState = {
-  currentCity: 'Paris',
+  currentCity: cities.paris,
   offers: [],
   isLoading: false,
   error: null,

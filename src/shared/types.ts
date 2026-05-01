@@ -1,10 +1,10 @@
-import { authStatus, cities } from './constants';
+import { authStatus, cities, ratingStars } from './constants';
 
 export type AuthorizationStatus = typeof authStatus[keyof typeof authStatus];
 
-export type Rating = 1 | 2 | 3 | 4 | 5;
+export type Rating = keyof typeof ratingStars;
 
-export type CityName = typeof cities[number];
+export type CityName = typeof cities[keyof typeof cities];
 
 type OfferType = 'apartment' | 'room' | 'house' | 'hotel';
 
