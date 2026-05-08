@@ -1,13 +1,25 @@
 type PremiumMarkProps = {
   show: boolean;
+  variant: keyof typeof premiumMarkConfig;
 };
 
-const PremiumMark = ({ show }: PremiumMarkProps) => {
-  return show ? (
-    <div className="place-card__mark">
+const premiumMarkConfig = {
+  placeCard: 'place-card__mark',
+  offer: 'offer__mark',
+} as const;
+
+const PremiumMark = ({ show, variant }: PremiumMarkProps) => {
+  if (!show) {
+    return null;
+  }
+
+  const className = premiumMarkConfig[variant];
+
+  return (
+    <div className={className}>
       <span>Premium</span>
     </div>
-  ) : null;
-}
+  );
+};
 
 export { PremiumMark };

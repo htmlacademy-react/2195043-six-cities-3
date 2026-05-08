@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { CitiesCardList } from '../../components/cities-card-list/cities-card-list';
 import { CitiesTabs } from '../../components/cities-tabs/cities-tabs';
+import { Header } from '../../components/header/header';
 import Map from '../../components/map/map';
 import { SortSection } from '../../components/sort-section/sort-section';
 import { Spinner } from '../../components/spinner/spinner';
@@ -62,6 +63,7 @@ const MainPage = () => {
 
   return (
     <div className="page page--gray page--main">
+      <Header />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

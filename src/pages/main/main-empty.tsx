@@ -1,4 +1,5 @@
 import { CitiesTabs } from '../../components/cities-tabs/cities-tabs';
+import { Header } from '../../components/header/header';
 import type { CityName } from '../../shared/types';
 
 type MainEmptyPageProps = {
@@ -6,32 +7,31 @@ type MainEmptyPageProps = {
   onCityChange: (city: CityName) => void;
 };
 
-const MainEmptyPage = ({ currentCity, onCityChange }: MainEmptyPageProps) => {
-  return (
-    <div className="page page--gray page--main">
-      <main className="page__main page__main--index page__main--index-empty">
-        <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <CitiesTabs currentCity={currentCity} onCityChange={onCityChange} />
-        </div>
-        <div className="cities">
-          <div className="cities__places-container cities__places-container--empty container">
-            <section className="cities__no-places">
-              <div className="cities__status-wrapper tabs__content">
-                <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">
+const MainEmptyPage = ({ currentCity, onCityChange }: MainEmptyPageProps) => (
+  <div className="page page--gray page--main">
+    <Header />
+    <main className="page__main page__main--index page__main--index-empty">
+      <h1 className="visually-hidden">Cities</h1>
+      <div className="tabs">
+        <CitiesTabs currentCity={currentCity} onCityChange={onCityChange} />
+      </div>
+      <div className="cities">
+        <div className="cities__places-container cities__places-container--empty container">
+          <section className="cities__no-places">
+            <div className="cities__status-wrapper tabs__content">
+              <b className="cities__status">No places to stay available</b>
+              <p className="cities__status-description">
                   We could not find any property available at the moment in
-                  {' '}
-                  {currentCity}
-                </p>
-              </div>
-            </section>
-            <div className="cities__right-section"></div>
-          </div>
+                {' '}
+                {currentCity}
+              </p>
+            </div>
+          </section>
+          <div className="cities__right-section"></div>
         </div>
-      </main>
-    </div>
-  );
-};
+      </div>
+    </main>
+  </div>
+);
 
 export { MainEmptyPage };

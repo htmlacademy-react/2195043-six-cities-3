@@ -21,16 +21,14 @@ type OfferGalleryProps = {
   imagesPath: string[];
 };
 
-const OfferGallery = ({ imagesPath }: OfferGalleryProps) => {
-  return (
-    <div className="offer__gallery">
-      {buildGalleryImages(imagesPath).map(({ path, key }) => (
-        <div className="offer__image-wrapper" key={key}>
-          <img className="offer__image" src={path} alt="Photo studio" />
-        </div>
-      ))}
-    </div>
-  );
-};
+const OfferGallery = ({ imagesPath }: OfferGalleryProps) => (
+  <div className="offer__gallery">
+    {buildGalleryImages(imagesPath).map(({ path, key }) => (
+      <div className="offer__image-wrapper" key={key}>
+        <img className="offer__image" src={path} alt="Photo studio" />
+      </div>
+    ))}
+  </div>
+);
 
 export { OfferGallery };

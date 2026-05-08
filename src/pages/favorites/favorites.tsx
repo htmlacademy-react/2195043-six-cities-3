@@ -1,4 +1,5 @@
 import { FavoritesCardList } from '../../components/favorites-card-list/favorites-card-list';
+import { Header } from '../../components/header/header';
 import { Spinner } from '../../components/spinner/spinner';
 import { useAppSelector } from '../../shared/hooks/redux';
 import {
@@ -22,6 +23,7 @@ const FavoritesPage = () => {
 
   return (
     <div className="page">
+      <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           {isLoading && <Spinner />}

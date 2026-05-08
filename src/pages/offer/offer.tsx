@@ -5,6 +5,7 @@ import { OfferGallery } from '../../components/offer-gallery/offer-gallery';
 import { OfferNearbyList } from '../../components/offer-nearby-list/offer-nearby-list';
 import { OfferNearbyMap } from '../../components/offer-nearby-map/offer-nearby-map';
 import { OfferReview } from '../../components/offer-review/offer-review';
+import { Header } from '../../components/header/header';
 import { PremiumMark } from '../../components/premium-mark/premium-mark';
 import { Spinner } from '../../components/spinner/spinner';
 import { routes } from '../../shared/constants';
@@ -62,6 +63,7 @@ const OfferPage = () => {
         [styles.loadingContainer]: isOfferLoading,
       })}
     >
+      <Header />
       {isOfferLoading && <Spinner />}
       {!isOfferLoading && offerError && <p>{offerError.message}</p>}
       {!isOfferLoading && !offerError && offer && (
@@ -72,7 +74,7 @@ const OfferPage = () => {
             </div>
             <div className="offer__container container">
               <div className="offer__wrapper">
-                <PremiumMark show={offer.isPremium} />
+                <PremiumMark show={offer.isPremium} variant={'offer'} />
                 <div className="offer__name-wrapper">
                   <h1 className="offer__name">{offer.title}</h1>
                   <FavoriteButton

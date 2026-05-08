@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Layout } from './components/layout/layout';
 import { PrivateRoute } from './components/private-route/private-route';
 import { ScrollToTop } from './components/scroll-to-top/scroll-to-top';
 import { FavoritesPage } from './pages/favorites/favorites';
@@ -36,20 +35,18 @@ const App = () => {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        <Route path={routes.root} element={<MainPage />} />
         <Route path={routes.login} element={<LoginPage />} />
         <Route path={routes.notFound} element={<NotFoundPage />} />
-        <Route path={routes.root} element={<Layout />}>
-          <Route index element={<MainPage />} />
-          <Route
-            path={routes.favorites}
-            element={
-              <PrivateRoute>
-                <FavoritesPage />
-              </PrivateRoute>
-            }
-          />
-          <Route path={routes.offer} element={<OfferPage />} />
-        </Route>
+        <Route
+          path={routes.favorites}
+          element={
+            <PrivateRoute>
+              <FavoritesPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path={routes.offer} element={<OfferPage />} />
         <Route path={routes.catchAll} element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

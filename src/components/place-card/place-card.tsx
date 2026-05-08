@@ -34,7 +34,7 @@ const PlaceCardComponent = ({ offer, variant, onActive }: PlaceCardProps) => {
         onActive?.(null);
       }}
     >
-      <PremiumMark show={offer.isPremium} />
+      <PremiumMark show={offer.isPremium} variant={'placeCard'} />
       <div
         className={cn('place-card__image-wrapper', {
           [imageWrapperClass]: true,
